@@ -83,11 +83,6 @@ angular.module 'mnoEnterpriseAngular'
           $state.go("home.subscriptions", {subType: 'cart'})
         else
           clearInstancesCache()
-          # Reload dock apps
-          MnoeAppInstances.getAppInstances().then(
-            (response) ->
-              $scope.apps = response
-          )
           $state.go('home.provisioning.order_summary', {subscriptionId: $stateParams.subscriptionId, editAction: $stateParams.editAction, cart: $stateParams.cart})
         ).finally(-> vm.isLoading = false)
 
