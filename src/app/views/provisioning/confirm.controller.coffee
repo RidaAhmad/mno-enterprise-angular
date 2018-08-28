@@ -1,5 +1,5 @@
 angular.module 'mnoEnterpriseAngular'
-  .controller('ProvisioningConfirmCtrl', ($scope, $state, $stateParams, $log, MnoeOrganizations, MnoeProvisioning, MnoeAppInstances, MnoeConfig, ProvisioningHelper, schemaForm, toastr) ->
+  .controller('ProvisioningConfirmCtrl', ($scope, $state, $stateParams, $log, MnoeOrganizations, MnoeProvisioning, MnoeAppInstances, MnoeConfig, ProvisioningHelper, schemaForm, toastr, MnoeProductInstances) ->
 
     vm = this
 
@@ -28,6 +28,11 @@ angular.module 'mnoEnterpriseAngular'
         .then((schema) ->
           vm.schema = schema
         )
+
+    clearInstancesCache = ->
+      MnoeAppInstances.emptyAppInstances()
+      MnoeProductInstances.emptyProductInstances()
+      MnoeProductInstances.clearCache()
 
     vm.editOrder = (reload = true) ->
       switch $stateParams.editAction.toLowerCase()
@@ -77,6 +82,7 @@ angular.module 'mnoEnterpriseAngular'
           MnoeProvisioning.refreshCartSubscriptions()
           $state.go("home.subscriptions", {subType: 'cart'})
         else
+          clearInstancesCache()
           # Reload dock apps
           MnoeAppInstances.getAppInstances().then(
             (response) ->
